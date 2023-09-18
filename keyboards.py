@@ -1,4 +1,5 @@
 from aiogram import types
+from misc import channel_link
 
 def get_yes_no():
     buttons = [
@@ -40,7 +41,7 @@ def come_back2():
 def check_button():
     buttons = [
         [
-            types.InlineKeyboardButton(text="Ссылка на канал", url="https://t.me/+ceka1CLul9E0Zjgy")
+            types.InlineKeyboardButton(text="Ссылка на канал", url=channel_link)
         ],
         [
             types.InlineKeyboardButton(text="Проверить подписку", callback_data="callback_sub")
@@ -243,13 +244,16 @@ def admin_delete_or_return(callback_data1: str, callback_data2: str):
     keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
     return keyboard
 
-def admin_edit_question(callback_data1: str, callback_data2: str):
+def admin_edit_question(callback_data1: str, callback_data2: str, callback_data3: str):
     buttons = [
         [
             types.InlineKeyboardButton(text="Изменить текст", callback_data=callback_data1)
         ],
         [
             types.InlineKeyboardButton(text="Изменить ответы", callback_data=callback_data2)
+        ],
+        [
+            types.InlineKeyboardButton(text="Изменить фото", callback_data=callback_data3)
         ],
         [
             types.InlineKeyboardButton(text="Вернуться в меню", callback_data="admin_back")
