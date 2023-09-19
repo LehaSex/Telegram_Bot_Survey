@@ -43,7 +43,6 @@ jobs:
         with:
           script-name: main.py
           onefile: true
-          macos-create-app-bundle: true
   
       # Uploads artifacts
       - name: "Upload Artifacts"
