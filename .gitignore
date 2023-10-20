@@ -152,3 +152,10 @@ cython_debug/
 #.idea/
 *.jpg
 *.db
+
+
+# nuitka
+main.build/
+main.dist/
+main.onefile-build/
+*.exe

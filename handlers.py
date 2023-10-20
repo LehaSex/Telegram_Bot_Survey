@@ -209,6 +209,7 @@ class AdminActions(StatesGroup):
     admin_material_add_audio = State()
     admin_material_add_video = State()
     admin_material_add_document = State()
+    admin_material_add_answer = State()
     admin_material_delete = State()
     admin_material_edit = State()
     admin_material_edit_text = State()
@@ -216,6 +217,7 @@ class AdminActions(StatesGroup):
     admin_material_edit_audio = State()
     admin_material_edit_video = State()
     admin_material_edit_document = State()
+    admin_material_edit_answer = State()
     admin_material_show = State()
     admin_question_add = State()
     admin_question_add_answers = State()
@@ -297,9 +299,9 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                     material = db_cursor.fetchone()
                     db_cursor.close()
                     if material[0] == 1:
-                        await callback.message.edit_reply_markup(reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish"))
+                        await callback.message.edit_reply_markup(reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish", "admin_material_edit_answer_input"))
                     else: 
-                        await callback.message.edit_reply_markup(reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish"))
+                        await callback.message.edit_reply_markup(reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish", "admin_material_edit_answer_input"))
                 elif action == "text":
                     action = callback.data.split("_")[4]
                     if action == "input":
@@ -317,10 +319,10 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                         material = db_cursor.fetchone()
                         db_cursor.close()
                         if material[0] == 1:
-                            await callback.message.edit_text("Текст материала изменён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish"))
+                            await callback.message.edit_text("Текст материала изменён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish", "admin_material_edit_answer_input"))
                         else:
-                            await callback.message.edit_text("Текст материала изменён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish"))
-                        await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document")})
+                            await callback.message.edit_text("Текст материала изменён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish", "admin_material_edit_answer_input"))
+                        await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
                     elif action == "incorrect":
                         await callback.message.edit_text("Введите новый текст материала", reply_markup=admin_back())
                         await state.set_state(AdminActions.admin_material_edit_text)
@@ -352,10 +354,10 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                         material = db_cursor.fetchone()
                         db_cursor.close()
                         if material[0] == 1:
-                            await callback.message.edit_text("Фото материала изменено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish"))
+                            await callback.message.edit_text("Фото материала изменено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish", "admin_material_edit_answer_input"))
                         else:
-                            await callback.message.edit_text("Фото материала изменено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish"))
-                        await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document")})
+                            await callback.message.edit_text("Фото материала изменено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish", "admin_material_edit_answer_input"))
+                        await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
                     elif action == "incorrect":
                         await callback.message.edit_text("Отправьте новое фото материала или нажмите кнопку удаления фото", reply_markup=admin_delete_or_return("admin_material_edit_image_delete", "admin_back"))
                         await state.set_state(AdminActions.admin_material_edit_image)
@@ -377,9 +379,9 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                         material = db_cursor.fetchone()
                         db_cursor.close()
                         if material[0] == 1:
-                            await callback.message.edit_text("Фото материала удалено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish"))
+                            await callback.message.edit_text("Фото материала удалено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish", "admin_material_edit_answer_input"))
                         else:
-                            await callback.message.edit_text("Фото материала удалено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish"))
+                            await callback.message.edit_text("Фото материала удалено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish", "admin_material_edit_answer_input"))
                 elif action == "video":
                     action = callback.data.split("_")[4]
                     if action == "input":
@@ -408,10 +410,10 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                         material = db_cursor.fetchone()
                         db_cursor.close()
                         if material[0] == 1:
-                            await callback.message.edit_text("Видео материала изменено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish"))
+                            await callback.message.edit_text("Видео материала изменено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish", "admin_material_edit_answer_input"))
                         else:
-                            await callback.message.edit_text("Видео материала изменено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish"))
-                        await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document")})
+                            await callback.message.edit_text("Видео материала изменено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish", "admin_material_edit_answer_input"))
+                        await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
                     elif action == "incorrect":
                         await callback.message.edit_text("Отправьте новое видео материала или нажмите кнопку удаления видео", reply_markup=admin_delete_or_return("admin_material_edit_video_delete", "admin_back"))
                         await state.set_state(AdminActions.admin_material_edit_video)
@@ -433,9 +435,9 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                         material = db_cursor.fetchone()
                         db_cursor.close()
                         if material[0] == 1:
-                            await callback.message.edit_text("Видео материала удалено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish"))
+                            await callback.message.edit_text("Видео материала удалено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish", "admin_material_edit_answer_input"))
                         else:
-                            await callback.message.edit_text("Видео материала удалено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish"))
+                            await callback.message.edit_text("Видео материала удалено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish", "admin_material_edit_answer_input"))
                 elif action == "audio":
                     action = callback.data.split("_")[4]
                     if action == "input":
@@ -467,10 +469,10 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                         material = db_cursor.fetchone()
                         db_cursor.close()
                         if material[0] == 1:
-                            await callback.message.edit_text("Аудио материала изменено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish"))
+                            await callback.message.edit_text("Аудио материала изменено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish", "admin_material_edit_answer_input"))
                         else:
-                            await callback.message.edit_text("Аудио материала изменено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish"))
-                        await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document")})
+                            await callback.message.edit_text("Аудио материала изменено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish", "admin_material_edit_answer_input"))
+                        await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
                     elif action == "incorrect":
                         await callback.message.edit_text("Отправьте новое аудио материала или нажмите кнопку удаления аудио", reply_markup=admin_delete_or_return("admin_material_edit_audio_delete", "admin_back"))
                         await state.set_state(AdminActions.admin_material_edit_audio)
@@ -492,9 +494,9 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                         material = db_cursor.fetchone()
                         db_cursor.close()
                         if material[0] == 1:
-                            await callback.message.edit_text("Аудио материала удалено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish"))
+                            await callback.message.edit_text("Аудио материала удалено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish", "admin_material_edit_answer_input"))
                         else:
-                            await callback.message.edit_text("Аудио материала удалено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish"))
+                            await callback.message.edit_text("Аудио материала удалено!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish", "admin_material_edit_answer_input"))
                 elif action == "document":
                     action = callback.data.split("_")[4]
                     if action == "input":
@@ -523,10 +525,10 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                         material = db_cursor.fetchone()
                         db_cursor.close()
                         if material[0] == 1:
-                            await callback.message.edit_text("Документ материала изменён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish"))
+                            await callback.message.edit_text("Документ материала изменён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish", "admin_material_edit_answer_input"))
                         else:
-                            await callback.message.edit_text("Документ материала изменён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish"))
-                        await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document")})
+                            await callback.message.edit_text("Документ материала изменён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish", "admin_material_edit_answer_input"))
+                        await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
                     elif action == "incorrect":
                         await callback.message.edit_text("Отправьте новый документ материала или нажмите кнопку удаления документа", reply_markup=admin_delete_or_return("admin_material_edit_document_delete", "admin_back"))
                         await state.set_state(AdminActions.admin_material_edit_document)
@@ -548,9 +550,48 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                         material = db_cursor.fetchone()
                         db_cursor.close()
                         if material[0] == 1:
-                            await callback.message.edit_text("Документ материала удалён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish"))
+                            await callback.message.edit_text("Документ материала удалён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish", "admin_material_edit_answer_input"))
                         else:
-                            await callback.message.edit_text("Документ материала удалён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish"))
+                            await callback.message.edit_text("Документ материала удалён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish", "admin_material_edit_answer_input"))
+                elif action == "answer":
+                    action = callback.data.split("_")[4]
+                    if action == "input":
+                        await callback.message.edit_text("Отправьте новый ответ материала или нажмите кнопку удаления материала", reply_markup=admin_delete_or_return("admin_material_edit_answer_delete", "admin_back"))
+                        await state.set_state(AdminActions.admin_material_edit_answer)
+                    elif action == "correct":
+                        # update db
+                        db_cursor = db.db_connection.cursor()
+                        db_cursor.execute("UPDATE content SET on_answer = ? WHERE id = ?", ((await state.get_data()).get("new_material_answer"), (await state.get_data()).get("new_material_id")))
+                        db.db_connection.commit()
+                        db_cursor.close()
+                        # if published
+                        db_cursor = db.db_connection.cursor()
+                        db_cursor.execute("SELECT published FROM content WHERE id = ?", ((await state.get_data()).get("new_material_id"),))
+                        material = db_cursor.fetchone()
+                        db_cursor.close()
+                        if material[0] == 1:
+                            await callback.message.edit_text("Ответ материала изменён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish", "admin_material_edit_answer_input"))
+                        else:
+                            await callback.message.edit_text("Ответ материала изменён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish", "admin_material_edit_answer_input"))
+                        await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
+                    elif action == "incorrect":
+                        await callback.message.edit_text("Отправьте новый ответ материала или нажмите кнопку удаления документа", reply_markup=admin_delete_or_return("admin_material_edit_answer_delete", "admin_back"))
+                        await state.set_state(AdminActions.admin_material_edit_answer)
+                    elif action == "delete":
+                        # update db
+                        db_cursor = db.db_connection.cursor()
+                        db_cursor.execute("UPDATE content SET on_answer = ? WHERE id = ?", (None, (await state.get_data()).get("new_material_id")))
+                        db.db_connection.commit()
+                        db_cursor.close()
+                        # if published
+                        db_cursor = db.db_connection.cursor()
+                        db_cursor.execute("SELECT published FROM content WHERE id = ?", ((await state.get_data()).get("new_material_id"),))
+                        material = db_cursor.fetchone()
+                        db_cursor.close()
+                        if material[0] == 1:
+                            await callback.message.edit_text("Ответ материала удалён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Снять с публикации", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_unpublish", "admin_material_edit_answer_input"))
+                        else:
+                            await callback.message.edit_text("Ответ материала удалён!\n\nВыберите необходимое действие", reply_markup=admin_edit("Опубликовать", "admin_material_edit_text_input", "admin_material_edit_image_input", "admin_material_edit_audio_input", "admin_material_edit_video_input", "admin_material_edit_document_input", "admin_material_publish", "admin_material_edit_answer_input"))
             elif action == "show":
                 db_cursor = db.db_connection.cursor()
                 db_cursor.execute("SELECT content_text FROM content")
@@ -596,12 +637,12 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                     db_cursor.execute("UPDATE content SET content_photo = ? WHERE id = ?", (full_file_name, current_id))
                     db.db_connection.commit()
                     db_cursor.close()
-                    await callback.message.edit_text("Отлично, картинка добавлена!\n\nДобавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish"))
+                    await callback.message.edit_text("Отлично, картинка добавлена!\n\nДобавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish", "admin_material_answer_add"))
                 elif action == "incorrect":
                     await callback.message.edit_text("Отлично, пришлите картинку", reply_markup=admin_back_or_skip("admin_material_image_skip"))
                     await state.set_state(AdminActions.admin_material_add_image)
                 elif action == "skip":
-                    await callback.message.edit_text("Пропущено добавление картинки. Добавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish"))
+                    await callback.message.edit_text("Пропущено добавление картинки. Добавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish", "admin_material_answer_add"))
                     await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": None})
             elif action == "audio":
                 action = callback.data.split("_")[3]
@@ -619,13 +660,13 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                     db_cursor.execute("UPDATE content SET content_audio = ? WHERE id = ?", (full_file_name, current_id))
                     db.db_connection.commit()
                     db_cursor.close()
-                    await callback.message.edit_text("Отлично, аудио добавлено!\n\nДобавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish"))
+                    await callback.message.edit_text("Отлично, аудио добавлено!\n\nДобавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish", "admin_material_answer_add"))
                 elif action == "incorrect":
                     await callback.message.edit_text("Отлично, пришлите аудио", reply_markup=admin_back_or_skip("admin_material_audio_skip"))
                     await state.set_state(AdminActions.admin_material_add_audio)
                 elif action == "skip":
-                    await callback.message.edit_text("Пропущено добавление аудио. Добавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish"))
-                    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": None, "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document")})
+                    await callback.message.edit_text("Пропущено добавление аудио. Добавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish", "admin_material_answer_add"))
+                    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
             elif action == "video":
                 action = callback.data.split("_")[3]
                 if action == "add":
@@ -642,13 +683,13 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                     db_cursor.execute("UPDATE content SET content_video = ? WHERE id = ?", (full_file_name, current_id))
                     db.db_connection.commit()
                     db_cursor.close()
-                    await callback.message.edit_text("Отлично, видео добавлено!\n\nДобавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish"))
+                    await callback.message.edit_text("Отлично, видео добавлено!\n\nДобавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish", "admin_material_answer_add"))
                 elif action == "incorrect":
                     await callback.message.edit_text("Отлично, пришлите видео", reply_markup=admin_back_or_skip("admin_material_video_skip"))
                     await state.set_state(AdminActions.admin_material_add_video)
                 elif action == "skip":
-                    await callback.message.edit_text("Пропущено добавление аудио. Добавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish"))
-                    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": None, "new_material_document": (await state.get_data()).get("new_material_document")})
+                    await callback.message.edit_text("Пропущено добавление аудио. Добавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish", "admin_material_answer_add"))
+                    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
             elif action == "document":
                 action = callback.data.split("_")[3]
                 if action == "add":
@@ -665,13 +706,32 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                     db_cursor.execute("UPDATE content SET content_document = ? WHERE id = ?", (full_file_name, current_id))
                     db.db_connection.commit()
                     db_cursor.close()
-                    await callback.message.edit_text("Отлично, документ добавлен!\n\nДобавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish"))
+                    await callback.message.edit_text("Отлично, документ добавлен!\n\nДобавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish", "admin_material_answer_add"))
                 elif action == "incorrect":
                     await callback.message.edit_text("Отлично, пришлите документ", reply_markup=admin_back_or_skip("admin_material_document_skip"))
                     await state.set_state(AdminActions.admin_material_add_document)
                 elif action == "skip":
-                    await callback.message.edit_text("Пропущено добавление документа. Добавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish"))
-                    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": None})
+                    await callback.message.edit_text("Пропущено добавление документа. Добавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish", "admin_material_answer_add"))
+                    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
+            elif action == "answer":
+                action = callback.data.split("_")[3]
+                if action == "add":
+                    await callback.message.edit_text("Пришлите ответ на вопрос, который отобразит этот материал.", reply_markup=admin_back_or_skip("admin_material_answer_skip"))
+                    # show all questions
+                    await state.set_state(AdminActions.admin_material_add_answer)
+                elif action == "correct":
+                    on_answer = (await state.get_data()).get("new_material_answer")
+                    db_cursor = db.db_connection.cursor()
+                    db_cursor.execute("UPDATE content SET on_answer = ? WHERE id = ?", (on_answer, (await state.get_data()).get("new_material_id")))
+                    db.db_connection.commit()
+                    db_cursor.close()
+                    await callback.message.edit_text("Отлично, ответ добавлен!\n\nДобавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish", "admin_material_answer_add"))
+                elif action == "incorrect":
+                    await callback.message.edit_text("Отлично, пришлите ответ", reply_markup=admin_back_or_skip("admin_material_answer_skip"))
+                    await state.set_state(AdminActions.admin_material_add_answer)
+                elif action == "skip":
+                    await callback.message.edit_text("Пропущено ответа на вопрос. Добавим что-то ещё?", reply_markup=admin_audio_video_document("admin_material_video_add", "admin_material_audio_add", "admin_material_document_add", "admin_material_finish", "admin_material_answer_add"))
+                    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
             elif action == "finish":
                 await callback.message.edit_text("Материал добавлен!\n\nПредпросмотр:")
                 # construct message from db
@@ -1040,7 +1100,7 @@ async def admin_material_add_handler(msg: Message, state: FSMContext):
 async def admin_material_add_handler(msg: Message, state: FSMContext):
     await msg.answer("Аудио добавлено! Предпросмотр:\n\n")
     await msg.answer_audio(msg.audio.file_id)
-    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": msg.audio.file_id, "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document")})
+    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": msg.audio.file_id, "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
     await msg.answer(text="Всё корректно?", reply_markup=admin_correct_or_not("admin_material_audio_correct", "admin_material_audio_incorrect"))
 
 # VIDEO
@@ -1048,16 +1108,35 @@ async def admin_material_add_handler(msg: Message, state: FSMContext):
 async def admin_material_add_handler(msg: Message, state: FSMContext):
     await msg.answer("Видео добавлено! Предпросмотр:\n\n")
     await msg.answer_video(msg.video.file_id)
-    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": msg.video.file_id, "new_material_document": (await state.get_data()).get("new_material_document")})
+    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": msg.video.file_id, "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
     await msg.answer(text="Всё корректно?", reply_markup=admin_correct_or_not("admin_material_video_correct", "admin_material_video_incorrect"))
 
 # DOCUMENT
 @router.message(AdminActions.admin_material_add_document, F.document)
 async def admin_material_add_handler(msg: Message, state: FSMContext):
-    await msg.answer("Документ добавлено! Предпросмотр:\n\n")
+    await msg.answer("Документ добавлен! Предпросмотр:\n\n")
     await msg.answer_document(msg.document.file_id)
-    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": msg.document.file_id})
+    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": msg.document.file_id, "new_material_answer": (await state.get_data()).get("new_material_answer")})
     await msg.answer(text="Всё корректно?", reply_markup=admin_correct_or_not("admin_material_document_correct", "admin_material_document_incorrect"))
+
+@router.message(AdminActions.admin_material_add_answer, F.text &  ~F.text.startswith('/'))
+async def admin_material_add_handler(msg: Message, state: FSMContext):
+    # check if text that recieved exists in question answers
+    temp = None
+    db_cursor = db.db_connection.cursor()
+    db_cursor.execute("SELECT question_answers FROM questions")
+    question_answers = db_cursor.fetchall()
+    db_cursor.close()
+    for i in question_answers:
+        if (msg.text in json.loads(i[0])):
+            temp = i[0]
+    if temp is None:
+        await msg.answer("Такого ответа на вопрос нет, попробуйте ещё раз")
+    else:
+        await msg.answer("Ответ добавлен! Предпросмотр:\n\n" + msg.text)
+        await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": msg.text})
+        await msg.answer(text="Всё корректно?", reply_markup=admin_correct_or_not("admin_material_answer_correct", "admin_material_answer_incorrect"))
+
 
 @router.message(AdminActions.admin_material_delete, F.text.regexp(r"^(\d+)$").as_("digits"))
 async def admin_material_delete_handler(msg: Message, state: FSMContext):
@@ -1200,7 +1279,8 @@ async def send_to_all(id):
     db_cursor.close()
     for i in users:
         try:
-            await build_show_content(i[0], id)
+            if await on_answer_check(id, i[0]):
+                await build_show_content(i[0], id)
         except:
             pass
 
@@ -1443,13 +1523,36 @@ async def show_content(callback: types.CallbackQuery, state: FSMContext):
     db_cursor = db.db_connection.cursor()
     db_cursor.execute("SELECT id FROM content WHERE published = 1")
     ids = db_cursor.fetchall()
+    db_cursor.execute("SELECT id FROM content WHERE on_answer NOT NULL")
     db_cursor.close()
     # check if content is not empty
     if ids is None:
         await callback.message.answer("Подожди пожалуйста, и я пришлю тебе полезные материалы")
     else:
         for i in ids:
-            await build_show_content(callback.from_user.id, i[0])
+            if await on_answer_check(i[0], callback.from_user.id):
+                await build_show_content(callback.from_user.id, i[0])
+
+    
+async def on_answer_check(current_content_id, user_id):
+    # check if current question id on_answer is not None
+    db_cursor = db.db_connection.cursor()
+    db_cursor.execute("SELECT on_answer FROM content WHERE id = ?", (current_content_id,))
+    on_answer = db_cursor.fetchone()
+    db_cursor.close()
+    # if on_answer is None
+    if on_answer[0] is None:
+        # print content
+        return True
+    else:
+        db_cursor = db.db_connection.cursor()
+        db_cursor.execute("SELECT answer FROM answers WHERE user_id = ? AND answer = ?", (user_id, on_answer[0]))
+        user_answer = db_cursor.fetchone()
+        db_cursor.close()
+        if user_answer is not None:
+            return True
+        else:
+            return False
 
 @router.callback_query(F.data.startswith("question_"))
 async def questions(callback: types.CallbackQuery, state: FSMContext):
@@ -1484,6 +1587,8 @@ async def questions(callback: types.CallbackQuery, state: FSMContext):
         await state.clear()
     else:
         await callback.message.edit_reply_markup()
+        if (next_question_id == 4):
+            await callback.message.answer("Как определить свой тип фигуры?\n\nВизуально\n\nВключите таймер и поставьте камеру на уровне диафрагмы, сделайте фото в нижнем белье или хорошо обтягивающей одежде.\n\nВычислительным путем\n\nОтдельно измерьте ширину плеч, талии и бедер.\n\nВажно: не обхват, а именно ширину. Сравните результаты. Для песочных часов плечи и бедра будут +/- одинаковы. Для других типов фигур один из показателей больше - условно это и будет зона коррекции.", entities=[MessageEntity(type="italic", offset=230, length=197)])
         if (get_question_photo(next_question_id) is not None):
             await callback.message.answer_photo(get_question_photo(next_question_id), caption=get_question_text(next_question_id), entities=get_question_entity(next_question_id), reply_markup=build_question_keyboard(next_question_id, get_smart_column_count(next_question_id)))
         else:
@@ -1496,41 +1601,58 @@ async def admin_material_edit_text_handler(msg: Message, state: FSMContext):
     temp = []
     # check entities is not empty
     if msg.entities is None:
-        await state.set_data({"new_material_text": msg.text, "new_material_entity": None, "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document")})
+        await state.set_data({"new_material_text": msg.text, "new_material_entity": None, "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
     else:
         msg_ent : types.List[MessageEntity] = msg.entities    
         for i in msg_ent:
             temp.append(vars(i))
-    await state.set_data({"new_material_text": msg.text, "new_material_entity": json.dumps(temp), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document")})
+    await state.set_data({"new_material_text": msg.text, "new_material_entity": json.dumps(temp), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
     await msg.answer(text="Всё корректно?", reply_markup=admin_correct_or_not("admin_material_edit_text_correct", "admin_material_edit_text_incorrect"))
 
 @router.message(AdminActions.admin_material_edit_image, F.photo)
 async def admin_material_edit_image_handler(msg: Message, state: FSMContext):
     await msg.answer("Картинка изменена! Предпросмотр:\n\n")
     await msg.answer_photo(msg.photo[-1].file_id)
-    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": msg.photo[-1].file_id, "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document")})
+    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": msg.photo[-1].file_id, "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
     await msg.answer(text="Всё корректно?", reply_markup=admin_correct_or_not("admin_material_edit_image_correct", "admin_material_edit_image_incorrect"))
 
 @router.message(AdminActions.admin_material_edit_video, F.video)
 async def admin_material_edit_video_handler(msg: Message, state: FSMContext):
     await msg.answer("Видео изменено! Предпросмотр:\n\n")
     await msg.answer_video(msg.video.file_id)
-    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": msg.video.file_id, "new_material_document": (await state.get_data()).get("new_material_document")})
+    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": msg.video.file_id, "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
     await msg.answer(text="Всё корректно?", reply_markup=admin_correct_or_not("admin_material_edit_video_correct", "admin_material_edit_video_incorrect"))
 
 @router.message(AdminActions.admin_material_edit_audio, F.audio)
 async def admin_material_edit_audio_handler(msg: Message, state: FSMContext):
     await msg.answer("Аудио изменено! Предпросмотр:\n\n")
     await msg.answer_audio(msg.audio.file_id)
-    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": msg.audio.file_id, "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document")})
+    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": msg.audio.file_id, "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": (await state.get_data()).get("new_material_answer")})
     await msg.answer(text="Всё корректно?", reply_markup=admin_correct_or_not("admin_material_edit_audio_correct", "admin_material_edit_audio_incorrect"))
 
 @router.message(AdminActions.admin_material_edit_document, F.document)
 async def admin_material_edit_document_handler(msg: Message, state: FSMContext):
     await msg.answer("Документ изменен! Предпросмотр:\n\n")
     await msg.answer_document(msg.document.file_id)
-    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": msg.document.file_id})
+    await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": msg.document.file_id, "new_material_answer": (await state.get_data()).get("new_material_answer")})
     await msg.answer(text="Всё корректно?", reply_markup=admin_correct_or_not("admin_material_edit_document_correct", "admin_material_edit_document_incorrect"))
+
+@router.message(AdminActions.admin_material_edit_answer, F.text & ~F.text.startswith("/"))
+async def admin_material_edit_answer_handler(msg: Message, state: FSMContext):
+    temp = None
+    db_cursor = db.db_connection.cursor()
+    db_cursor.execute("SELECT question_answers FROM questions")
+    question_answers = db_cursor.fetchall()
+    db_cursor.close()
+    for i in question_answers:
+        if (msg.text in json.loads(i[0])):
+            temp = i[0]
+    if temp is None:
+        await msg.answer("Такого ответа на вопрос нет, попробуйте ещё раз")
+    else:
+        await msg.answer("Ответ изменен! Предпросмотр:\n\n" + msg.text)
+        await state.set_data({"new_material_text": (await state.get_data()).get("new_material_text"), "new_material_entity": (await state.get_data()).get("new_material_entity"), "new_material_id": (await state.get_data()).get("new_material_id"), "new_material_image": (await state.get_data()).get("new_material_image"), "new_material_audio": (await state.get_data()).get("new_material_audio"), "new_material_video": (await state.get_data()).get("new_material_video"), "new_material_document": (await state.get_data()).get("new_material_document"), "new_material_answer": msg.text})
+        await msg.answer(text="Всё корректно?", reply_markup=admin_correct_or_not("admin_material_edit_answer_correct", "admin_material_edit_answer_incorrect"))
 
 @router.message(AdminActions.admin_question_add_answers, F.text)
 async def admin_question_add_handler(msg: Message, state: FSMContext):
@@ -1640,6 +1762,6 @@ async def message_handler(msg: Message, state: FSMContext):
 #    for i in msg_ent:
 #        temp.append(vars(i))
 #    print(json.dumps(temp))
-    photo = FSInputFile("photos/1.jpg")
-    await msg.answer_photo(photo, caption="test", reply_markup=build_question_preview_keyboard(["test", "test2"]))
+#    photo = FSInputFile("photos/1.jpg")
+#    await msg.answer_photo(photo, caption="test", reply_markup=build_question_preview_keyboard(["test", "test2"]))
     await msg.answer("Не знаю такую команду")

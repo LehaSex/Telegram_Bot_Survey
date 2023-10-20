@@ -3,8 +3,11 @@ import asyncio
 import logging
 from handlers import router
 import db
+import art
 
 async def main():
+    art.tprint("Luxury Plus")
+    art.tprint("SIZE Bot")
     print("Starting bot...")
     print("Initializing database...")
     db.init_db()

@@ -156,12 +156,13 @@ def admin_correct_or_not(callback_data : str, callback_data2 : str):
     keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
     return keyboard
 
-def admin_audio_video_document(callback_data : str, callback_data2 : str, callback_data3 : str, callback_data4 : str):
+def admin_audio_video_document(callback_data : str, callback_data2 : str, callback_data3 : str, callback_data4 : str, callback_data5 : str):
     buttons = [
         [
             types.InlineKeyboardButton(text="🎥Видео", callback_data=callback_data),
             types.InlineKeyboardButton(text="🎧Аудио", callback_data=callback_data2),
-            types.InlineKeyboardButton(text="📄Документ", callback_data=callback_data3)
+            types.InlineKeyboardButton(text="📄Документ", callback_data=callback_data3),
+            types.InlineKeyboardButton(text="📝Ответ", callback_data=callback_data5)
         ],
         [
             types.InlineKeyboardButton(text="Пропустить", callback_data=callback_data4)
@@ -205,7 +206,7 @@ def admin_delete(callback_data: str):
     keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
     return keyboard
 
-def admin_edit(text : str,callback_data1: str, callback_data2: str, callback_data3: str, callback_data4: str, callback_data5: str, callback_data6):
+def admin_edit(text : str,callback_data1: str, callback_data2: str, callback_data3: str, callback_data4: str, callback_data5: str, callback_data6, callback_data7: str):
     buttons = [
         [
             types.InlineKeyboardButton(text="Изменить текст", callback_data=callback_data1)
@@ -221,6 +222,9 @@ def admin_edit(text : str,callback_data1: str, callback_data2: str, callback_dat
         ],
         [
             types.InlineKeyboardButton(text="Изменить документ", callback_data=callback_data5)
+        ],
+        [
+            types.InlineKeyboardButton(text="Изменить ответ", callback_data=callback_data7)
         ],
         [
             types.InlineKeyboardButton(text=text, callback_data=callback_data6)
