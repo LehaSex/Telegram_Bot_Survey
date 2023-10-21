@@ -856,7 +856,7 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                 elif action == "correct":
                     # INSERT INTO DB
                     db_cursor = db.db_connection.cursor()
-                    db_cursor.execute("INSERT INTO questions (question_text, question_answers, question_text_ent) VALUES (?, ?, ?)", ((await state.get_data()).get("new_question_text"), (await state.get_data()).get("new_question_answer"), (await state.get_data()).get("new_question_text_ent")))
+                    db_cursor.execute("INSERT INTO questions (question_text, question_answers, question_text_ent) VALUES (?, ?, ?)", ((await state.get_data()).get("new_question_text"), (await state.get_data()).get("new_question_answer"), (await state.get_data()).get("new_question_entity")))
                     db.db_connection.commit()
                     # get id
                     question_id = db_cursor.lastrowid
@@ -941,7 +941,7 @@ async def admin_actions(callback: types.CallbackQuery, state: FSMContext):
                         await state.set_state(AdminActions.admin_question_edit_text)
                     elif action == "correct":
                         db_cursor = db.db_connection.cursor()
-                        db_cursor.execute("UPDATE questions SET question_text = ?, question_text_ent = ? WHERE id = ?", ((await state.get_data()).get("new_question_text"), (await state.get_data()).get("new_question_text_ent"), (await state.get_data()).get("new_question_id"),))
+                        db_cursor.execute("UPDATE questions SET question_text = ?, question_text_ent = ? WHERE id = ?", ((await state.get_data()).get("new_question_text"), (await state.get_data()).get("new_question_entity"), (await state.get_data()).get("new_question_id"),))
                         db.db_connection.commit()
                         db_cursor.close()
                         await callback.message.edit_text("Вопрос изменён!", reply_markup=admin_menu(check_superadmin(callback.from_user.id)))
@@ -1587,8 +1587,6 @@ async def questions(callback: types.CallbackQuery, state: FSMContext):
         await state.clear()
     else:
         await callback.message.edit_reply_markup()
-        if (next_question_id == 4):
-            await callback.message.answer("Как определить свой тип фигуры?\n\nВизуально\n\nВключите таймер и поставьте камеру на уровне диафрагмы, сделайте фото в нижнем белье или хорошо обтягивающей одежде.\n\nВычислительным путем\n\nОтдельно измерьте ширину плеч, талии и бедер.\n\nВажно: не обхват, а именно ширину. Сравните результаты. Для песочных часов плечи и бедра будут +/- одинаковы. Для других типов фигур один из показателей больше - условно это и будет зона коррекции.", entities=[MessageEntity(type="italic", offset=230, length=197)])
         if (get_question_photo(next_question_id) is not None):
             await callback.message.answer_photo(get_question_photo(next_question_id), caption=get_question_text(next_question_id), entities=get_question_entity(next_question_id), reply_markup=build_question_keyboard(next_question_id, get_smart_column_count(next_question_id)))
         else:
