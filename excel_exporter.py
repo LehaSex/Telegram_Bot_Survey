@@ -63,6 +63,7 @@ async def export_excel():
     answers = db_cursor.fetchall()
     db_cursor.close()
     for i in range(len(answers)):
+        # get answer from answers
         ws2["A" + str(i + 2)] = answers[i][0]
         # find user, that chat_id == answers[i][1]
         user = None
@@ -79,7 +80,7 @@ async def export_excel():
                 question = questions[j]
                 break
         # link to question in questions sheet
-        ws2["C" + str(i + 2)] = '=HYPERLINK("{}", "{}")'.format("#'Вопросы'!A" + str(j + 2), question[1])
+        ws2["C" + str(i + 2)] = '=HYPERLINK("{}", "{}")'.format("#'Вопросы'!A" + str(j + 2), question[1][:40] + "...")
         ws2["D" + str(i + 2)] = answers[i][3]
 
     # save excel
