@@ -35,7 +35,10 @@ async def export_excel():
     users = db_cursor.fetchall()
     db_cursor.close()
     for i in range(len(users)):
-        ws["A" + str(i + 2)] = "@" + users[i][4]
+        if users[i][4] == None:
+            ws["A" + str(i + 2)] = users[i][1]
+        else:
+           ws["A" + str(i + 2)] = users[i][4] 
         ws["B" + str(i + 2)] = users[i][2]
         ws["C" + str(i + 2)] = users[i][3]
         ws["D" + str(i + 2)] = users[i][7]
@@ -72,7 +75,10 @@ async def export_excel():
                 user = users[j]
                 break
         # link to user in users sheet
-        ws2["B" + str(i + 2)] = '=HYPERLINK("{}", "{}")'.format("#'Пользователи'!A" + str(j + 2), "@" + user[4])
+        if user[4] == None:
+            ws2["B" + str(i + 2)] = '=HYPERLINK("{}", "{}")'.format("#'Пользователи'!A" + str(j + 2), user[1])
+        else:
+            ws2["B" + str(i + 2)] = '=HYPERLINK("{}", "{}")'.format("#'Пользователи'!A" + str(j + 2), "@" + user[4])
         # find question, that id == answers[i][2]
         question = None
         for j in range(len(questions)):
@@ -83,5 +89,23 @@ async def export_excel():
         ws2["C" + str(i + 2)] = '=HYPERLINK("{}", "{}")'.format("#'Вопросы'!A" + str(j + 2), question[1][:40] + "...")
         ws2["D" + str(i + 2)] = answers[i][3]
 
+
+    # pretty print
+    await excel_pretty_print(ws, 1.2)
+    await excel_pretty_print(ws1, 0.3)
+    await excel_pretty_print(ws2, 1.2)
     # save excel
     wb.save("export.xlsx")
+
+async def excel_pretty_print(ws, value):
+    for col in ws.columns:
+        max_length = 0
+        column = col[0].column_letter # Get the column name
+        for cell in col:
+            try: # Necessary to avoid error on empty cells
+                if len(str(cell.value)) > max_length:
+                    max_length = len(str(cell.value))
+            except:
+                pass
+        adjusted_width = (max_length + 2) * value
+        ws.column_dimensions[column].width = adjusted_width

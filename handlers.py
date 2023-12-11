@@ -1173,11 +1173,15 @@ async def start_handler(msg: Message, state: FSMContext):
     db_cursor = db.db_connection.cursor()
     db_cursor.execute("SELECT * FROM users WHERE chat_id = ?", (msg.from_user.id,))
     user = db_cursor.fetchone()
+    # check if username is None 
+    usernm = msg.from_user.username
+    if usernm is None:
+        usernm = msg.from_user.id
     if user is None:
-        db_cursor.execute("INSERT INTO users (chat_id, first_name, last_name, username, date) VALUES (?, ?, ?, ?, ?)", (msg.from_user.id, msg.from_user.first_name, msg.from_user.last_name, msg.from_user.username, msg.date))
+        db_cursor.execute("INSERT INTO users (chat_id, first_name, last_name, username, date) VALUES (?, ?, ?, ?, ?)", (msg.from_user.id, msg.from_user.first_name, msg.from_user.last_name, usernm, msg.date))
         db.db_connection.commit()
-    elif user[1] != msg.from_user.first_name or user[2] != msg.from_user.last_name or user[3] != msg.from_user.username:
-        db_cursor.execute("UPDATE users SET first_name = ?, last_name = ?, username = ? WHERE chat_id = ?", (msg.from_user.first_name, msg.from_user.last_name, msg.from_user.username, msg.from_user.id))
+    elif (user[2] != msg.from_user.first_name or user[3] != msg.from_user.last_name or user[4] != msg.from_user.username) and user[1] == msg.from_user.id:
+        db_cursor.execute("UPDATE users SET first_name = ?, last_name = ?, username = ? WHERE chat_id = ?", (msg.from_user.first_name, msg.from_user.last_name, usernm, msg.from_user.id))
         db.db_connection.commit()
     db_cursor.close()
     await msg.answer("Привет!\nРада Вас видеть! Давайте познакомимся!\nМеня зовут "+ bot_name + ", я твой виртуальный стилист бренда Luxury Plus. Помогу подобрать образ на свидание или деловую встречу.\n\nКак я могу к Вам обращаться?\n\nВведите свое имя в ответ на это сообщение")
